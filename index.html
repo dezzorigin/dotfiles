@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dotfiles — Satu meja kerja, semua tombol di tempatnya.</title>
+<meta name="description" content="Etalase dotfiles EndeavourOS/Hyprland: Caelestia + Ax-Shell, 192 file konfigurasi. Katalog, cara install, dan keybind — produknya tetap repo dotfiles-nya.">
+<meta property="og:title" content="dotfiles — Satu meja kerja, semua tombol di tempatnya.">
+<meta property="og:description" content="Etalase dotfiles EndeavourOS/Hyprland: Caelestia + Ax-Shell, 192 file konfigurasi. Katalog, cara install, dan keybind.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dotfiles.pages.dev/">
+<meta property="og:image" content="https://dotfiles.pages.dev/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="dotfiles — Satu meja kerja, semua tombol di tempatnya.">
+<meta name="twitter:description" content="Etalase dotfiles EndeavourOS/Hyprland: Caelestia + Ax-Shell, 192 file konfigurasi. Katalog, cara install, dan keybind.">
+<meta name="twitter:image" content="https://dotfiles.pages.dev/og-image.png">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="wordmark" href="/">dotfiles</a>
+  <nav aria-label="Navigasi utama">
+    <a href="#katalog">Katalog</a>
+    <a href="#install">Install</a>
+    <a href="#keybind">Keybind</a>
+    <a href="https://github.com/dezzorigin/dotfiles" class="nav-github">GitHub
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+    </a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="kicker">Dotfiles · EndeavourOS · Hyprland</p>
+    <h1>Satu meja kerja,<br>semua tombol di tempatnya.</h1>
+    <p class="lede">Konfigurasi satu mesin EndeavourOS di ThinkPad T490s:
+      Hyprland sebagai compositor, Caelestia sebagai mesin utama, Ax-Shell
+      sebagai bar dan launcher. Ultra-minimalis, keyboard-driven — dan
+      repo ini sumber kebenarannya, bukan salinan yang tercecer.</p>
+    <p class="actions">
+      <a class="btn btn-primary" href="#install">Lihat cara install</a>
+      <a class="btn btn-ghost" href="https://github.com/dezzorigin/dotfiles">Buka di GitHub</a>
+    </p>
+    <dl class="stats">
+      <div><dt>File terlacak</dt><dd>192 file</dd></div>
+      <div><dt>Ax-Shell</dt><dd>127 file</dd></div>
+      <div><dt>Caelestia</dt><dd>50 file</dd></div>
+      <div><dt>Script Python</dt><dd>66 file</dd></div>
+    </dl>
+    <p class="note">Halaman ini <strong>etalase</strong> — katalog dan cara
+      install saja. Produknya tetap repo dotfiles-nya, lengkap dengan
+      gambar desktop di <code>assets/dekstop.png</code>.</p>
+  </section>
+
+  <section class="mock" aria-label="Mockup desktop">
+    <div class="desktop-mock">
+      <div class="mock-bar">
+        <span class="ws"><i class="on">1</i><i>2</i><i>3</i><i>4</i><i>5</i></span>
+        <span class="mock-clock">Kamis, 19 Nov · 16:52</span>
+        <span class="mock-tray">Wi-Fi · 87% · 32 GB</span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-launcher" aria-hidden="true">
+          <span>foot</span><span>zen</span><span>code</span><span>files</span><span>music</span>
+        </div>
+        <div class="mock-term">
+          <div class="mock-term-title"><span class="dot"></span><span class="dot"></span><span>nabil@supercomputer — foot</span></div>
+<pre class="mock-term-body">nabil@supercomputer ~&gt; fastfetch
+OS        EndeavourOS x86_64
+Host      ThinkPad T490s
+Kernel    Linux 6.19.x
+Shell     fish
+WM        Hyprland (UWSM)
+Terminal  foot
+Prompt    starship</pre>
+        </div>
+      </div>
+    </div>
+    <ol class="callouts">
+      <li><strong>1 — Bar Caelestia.</strong> Workspace, jam, dan tray dalam satu garis tipis di atas.</li>
+      <li><strong>2 — Launcher.</strong> Dibuka dengan <kbd>Super</kbd>, tanpa mouse.</li>
+      <li><strong>3 — Terminal foot.</strong> Prompt starship, shell fish, semua dari symlink repo.</li>
+      <li><strong>4 — Warna dari wallpaper.</strong> Matugen mewarnai Hyprland, foot, dan fuzzel sekaligus.</li>
+    </ol>
+  </section>
+
+  <section class="catalog" id="katalog" aria-label="Katalog konfigurasi">
+    <h2>Katalog konfigurasi.</h2>
+    <p class="section-lede">Enam rak di meja ini. Angka file dihitung dari repo — bukan perkiraan.</p>
+    <div class="row">
+      <h3>Compositor — Hyprland</h3>
+      <p>Keybind, aturan jendela, animasi, dekorasi, dan skema warna. Sesi dinyalakan UWSM, bukan compositor.</p>
+      <p class="meta"><code>.local/share/caelestia/hypr/</code> · 19 file</p>
+    </div>
+    <div class="row">
+      <h3>Mesin utama — Caelestia</h3>
+      <p>Konfigurasi pengguna: fish, foot, starship, btop, fastfetch, uwsm, plus integrasi VS Code dan Zed.</p>
+      <p class="meta"><code>.local/share/caelestia/</code> · 50 file</p>
+    </div>
+    <div class="row">
+      <h3>Bar &amp; launcher — Ax-Shell</h3>
+      <p>Bar, launcher, dashboard, pemutar musik, mixer, dan notifikasi di atas Fabric. Modul terbesar di repo ini.</p>
+      <p class="meta"><code>.config/Ax-Shell/</code> · 127 file · 36 modul · 24 stylesheet</p>
+    </div>
+    <div class="row">
+      <h3>Terminal &amp; prompt</h3>
+      <p>foot sebagai terminal, fish sebagai shell, starship sebagai prompt. Ringan, cepat, tanpa hiasan berlebih.</p>
+      <p class="meta"><code>foot.ini · config.fish · starship.toml</code> · 3 file</p>
+    </div>
+    <div class="row">
+      <h3>Musik &amp; visual</h3>
+      <p>cava dengan enam shader visualizer, matugen yang menurunkan warna dari wallpaper, dan tema Spicetify Caelestia.</p>
+      <p class="meta"><code>.config/cava/ · .config/matugen/ · .config/spicetify/</code> · 12 file</p>
+    </div>
+    <div class="row">
+      <h3>Editor</h3>
+      <p>VS Code (dengan ekstensi integrasi Caelestia 1.2.0), Zed, dan micro — keybinding dan pengaturannya ikut di repo.</p>
+      <p class="meta"><code>.local/share/caelestia/vscode/ · zed/ · micro/</code> · 14 file</p>
+    </div>
+  </section>
+
+  <section class="install" id="install" aria-label="Cara install">
+    <h2>Cara install.</h2>
+    <p class="section-lede">Dotfiles itu personal — baca dulu, lalu
+      <strong>cherry-pick</strong> yang kamu butuhkan. Jangan salin semuanya
+      mentah-mentah. Prasyarat: EndeavourOS atau Arch Linux, plus fish
+      terpasang sebelum menjalankan install script.</p>
+    <div class="tabs" role="tablist" aria-label="Pilihan cara install">
+      <button role="tab" aria-selected="true" aria-controls="step-caelestia" id="tab-caelestia" data-tab="step-caelestia">Caelestia</button>
+      <button role="tab" aria-selected="false" aria-controls="step-axshell" id="tab-axshell" data-tab="step-axshell" tabindex="-1">Ax-Shell</button>
+      <button role="tab" aria-selected="false" aria-controls="step-cepat" id="tab-cepat" data-tab="step-cepat" tabindex="-1">Cara cepat</button>
+    </div>
+    <div class="panel" role="tabpanel" id="step-caelestia" aria-labelledby="tab-caelestia" tabindex="0">
+      <p>Clone ke <code>~/.local/share/caelestia</code> — posisi yang
+        direkomendasikan upstream, karena install script membuat symlink ke
+        semua config. Repo tidak boleh dipindah setelah install.</p>
+<pre><code>git clone https://github.com/dezzorigin/dotfiles.git ~/.local/share/caelestia
+cd ~/.local/share/caelestia
+./install.fish --vscode=codium --aur-helper=yay</code></pre>
+      <p>Opsi lain: <code>--spotify</code>, <code>--discord</code>,
+        <code>--zen</code>, <code>--noconfirm</code>. Daftar paket lengkap ada
+        di <code>.local/share/caelestia/README.md</code>.</p>
+    </div>
+    <div class="panel" role="tabpanel" id="step-axshell" aria-labelledby="tab-axshell" tabindex="0" hidden>
+      <p>Pasang Ax-Shell di <code>~/.config/Ax-Shell</code> — bar, launcher,
+        dan dashboard di atas Fabric.</p>
+<pre><code>bash .config/Ax-Shell/install.sh
+# mencopot: bash .config/Ax-Shell/uninstall.sh</code></pre>
+      <p>Script ini memasang paketnya sendiri (fabric, matugen, cava,
+        hypridle, hyprlock, playerctl, dan lain-lain).</p>
+    </div>
+    <div class="panel" role="tabpanel" id="step-cepat" aria-labelledby="tab-cepat" tabindex="0" hidden>
+      <p>Hanya mau meniru sebagian? Salin folder yang dibutuhkan saja.</p>
+<pre><code>git clone https://github.com/dezzorigin/dotfiles.git
+cd dotfiles
+cp -r .local/share/* ~/.local/share/
+cp -r .config/* ~/.config/</code></pre>
+      <p>Login manager (mis. greetd + tuigreet) dipasang terpisah — dotfiles
+        ini tidak menyertakannya.</p>
+    </div>
+  </section>
+
+  <section class="keybinds" id="keybind" aria-label="Keybind utama">
+    <h2>Tombol yang paling sering ditekan.</h2>
+    <p class="section-lede">Satu meja kerja yang keyboard-driven: tiap
+      keycap di bawah ini tombol fisik di keyboard, bukan hiasan. Daftar
+      lengkap ada di <code>hyprland/keybinds.conf</code>.</p>
+    <ul>
+      <li><span class="keys"><kbd>Super</kbd></span><span>Buka launcher</span></li>
+      <li><span class="keys"><kbd>Super</kbd> + <kbd>T</kbd></span><span>Terminal (foot)</span></li>
+      <li><span class="keys"><kbd>Super</kbd> + <kbd>W</kbd></span><span>Browser (Zen)</span></li>
+      <li><span class="keys"><kbd>Super</kbd> + <kbd>C</kbd></span><span>IDE (VSCodium)</span></li>
+      <li><span class="keys"><kbd>Super</kbd> + <kbd>S</kbd></span><span>Special workspace</span></li>
+      <li><span class="keys"><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>Del</kbd></span><span>Menu sesi</span></li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>dotfiles — Commander's Dotfiles · MIT License · repo:
+    <a href="https://github.com/dezzorigin/dotfiles">github.com/dezzorigin/dotfiles</a></p>
+  <p class="foot-note">Halaman ini etalase. Keamanan repo diverifikasi audit
+    nama path + gitleaks riwayat penuh (19 Nov 2026): bersih — dua temuan
+    hanyalah shortcut keyboard VS Code yang salah di-flag sebagai API key.
+    Screenshot desktop baru dan video demo menyusul sebagai follow-up.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>Arsitektur dotfiles — diagram</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font-family: "IBM Plex Mono", ui-monospace, monospace; background: #F4F5F1; color: #1A1E22; margin: 0; padding: 32px; }
+  h1 { font-family: "Space Grotesk", sans-serif; font-size: 28px; margin: 0 0 8px; }
+  p { color: #5B6570; max-width: 72ch; line-height: 1.6; }
+  svg { width: 100%; max-width: 960px; height: auto; display: block; margin: 24px 0; background: #fff; border: 1px solid #DFE2DC; border-radius: 4px; }
+  .box { fill: #fff; stroke: #1A1E22; stroke-width: 1.5; }
+  .box-teal { fill: #0E7C7B; }
+  .box-ink { fill: #1A1E22; }
+  .lbl { font-size: 13px; fill: #1A1E22; font-weight: bold; }
+  .sub { font-size: 11px; fill: #5B6570; }
+  .wht { font-size: 13px; fill: #fff; font-weight: bold; }
+  .wsub { font-size: 11px; fill: #D8E4E3; }
+  .arrow { stroke: #0E7C7B; stroke-width: 2; fill: none; marker-end: url(#ah); }
+  .note { font-size: 12px; fill: #5B6570; }
+</style>
+</head>
+<body>
+<h1>Arsitektur dotfiles</h1>
+<p>Repo adalah sumber kebenaran. File tinggal di repo; sistem memakai symlink
+dari <code>~/.config</code> dan <code>~/.local/share</code>. UWSM menyalakan
+sesi, Hyprland mengatur jendela, Ax-Shell menggambar bar &amp; launcher.</p>
+
+<svg viewBox="0 0 960 560" role="img" aria-label="Diagram arsitektur dotfiles: repo di atas, symlink ke home, UWSM, Hyprland, Ax-Shell, Caelestia, dan estetika">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0E7C7B"></path>
+    </marker>
+  </defs>
+
+  <!-- Repo -->
+  <rect class="box-teal" x="280" y="16" width="400" height="64" rx="4"></rect>
+  <text class="wht" x="300" y="42">repo dotfiles — git</text>
+  <text class="wsub" x="300" y="62">192 file · Caelestia 50 · Ax-Shell 127 · cava 9 · lain 6</text>
+
+  <!-- Symlink -->
+  <path class="arrow" d="M 480 80 V 118"></path>
+  <text class="note" x="492" y="104">symlink</text>
+
+  <rect class="box" x="280" y="118" width="400" height="56" rx="4"></rect>
+  <text class="lbl" x="300" y="142">~/.config + ~/.local/share</text>
+  <text class="sub" x="300" y="162">bukan copy — satu git pull, semua tempat ikut</text>
+
+  <path class="arrow" d="M 480 174 V 212"></path>
+
+  <!-- UWSM -->
+  <rect class="box" x="330" y="212" width="300" height="52" rx="4"></rect>
+  <text class="lbl" x="350" y="234">UWSM — session manager</text>
+  <text class="sub" x="350" y="252">menyalakan lingkungan Wayland</text>
+
+  <path class="arrow" d="M 480 264 V 302"></path>
+
+  <!-- Hyprland -->
+  <rect class="box-ink" x="280" y="302" width="400" height="56" rx="4"></rect>
+  <text class="wht" x="300" y="326">Hyprland — compositor</text>
+  <text class="wsub" x="300" y="346">keybinds · rules · animasi · dekorasi (19 file hypr/)</text>
+
+  <!-- branches -->
+  <path class="arrow" d="M 360 358 V 400"></path>
+  <path class="arrow" d="M 480 358 V 400"></path>
+  <path class="arrow" d="M 600 358 V 400"></path>
+
+  <rect class="box" x="60" y="400" width="260" height="96" rx="4"></rect>
+  <text class="lbl" x="80" y="428">Ax-Shell — bar &amp; launcher</text>
+  <text class="sub" x="80" y="448">36 modul · 24 stylesheet</text>
+  <text class="sub" x="80" y="466">10 script · 5 service · 12 util</text>
+  <text class="sub" x="80" y="484">bar · launcher · player · mixer</text>
+
+  <rect class="box" x="350" y="400" width="260" height="96" rx="4"></rect>
+  <text class="lbl" x="370" y="428">Caelestia — config pengguna</text>
+  <text class="sub" x="370" y="448">fish · foot · starship</text>
+  <text class="sub" x="370" y="466">btop · fastfetch · uwsm</text>
+  <text class="sub" x="370" y="484">vscode · zed · micro</text>
+
+  <rect class="box" x="640" y="400" width="260" height="96" rx="4"></rect>
+  <text class="lbl" x="660" y="428">Estetika</text>
+  <text class="sub" x="660" y="448">matugen — warna dari wallpaper</text>
+  <text class="sub" x="660" y="466">cava — visualizer + shader</text>
+  <text class="sub" x="660" y="484">spicetify · fuzzel</text>
+
+  <text class="note" x="60" y="540">Dibuat sebagai HTML + SVG (bukan Mermaid), mengikuti gaya diagram-design.</text>
+</svg>
+
+<p><a href="../ARCHITECTURE.md">Kembali ke ARCHITECTURE.md</a></p>
+</body>
+</html>
