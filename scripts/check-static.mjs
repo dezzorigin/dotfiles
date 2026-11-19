@@ -57,15 +57,15 @@ const ogRequired = [
   ["og:title", /<meta property="og:title" content="[^"]+"/],
   ["og:description", /<meta property="og:description" content="[^"]+"/],
   ["og:type", /<meta property="og:type" content="website"/],
-  ["og:url", /<meta property="og:url" content="https:\/\/dotfiles\.pages\.dev\/"/],
-  ["og:image", /<meta property="og:image" content="https:\/\/dotfiles\.pages\.dev\/og-image\.png"/],
+  ["og:url", /<meta property="og:url" content="https:\/\/dezz-dotfiles\.pages\.dev\/"/],
+  ["og:image", /<meta property="og:image" content="https:\/\/dezz-dotfiles\.pages\.dev\/og-image\.png"/],
   ["twitter:card", /<meta name="twitter:card" content="summary_large_image"/],
   ["twitter:title", /<meta name="twitter:title" content="[^"]+"/],
   ["twitter:description", /<meta name="twitter:description" content="[^"]+"/],
-  ["twitter:image", /<meta name="twitter:image" content="https:\/\/dotfiles\.pages\.dev\/og-image\.png"/],
+  ["twitter:image", /<meta name="twitter:image" content="https:\/\/dezz-dotfiles\.pages\.dev\/og-image\.png"/],
 ];
 for (const [name, re] of ogRequired) {
-  check(re.test(html), `tag ${name} tidak ada / tidak absolut ke dotfiles.pages.dev`);
+  check(re.test(html), `tag ${name} tidak ada / tidak absolut ke dezz-dotfiles.pages.dev`);
 }
 check(existsSync("og-image.png"), "og-image.png tidak ada di root");
 check(existsSync("favicon.svg"), "favicon.svg tidak ada di root");

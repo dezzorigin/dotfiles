@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Verifikasi live landing dotfiles di Cloudflare Pages.
 
-Usage: python3 scripts/verify-live.py https://dotfiles.pages.dev
+Usage: python3 scripts/verify-live.py https://dezz-dotfiles.pages.dev
 
 Cek: root 200 + marker landing + semua tag og:/twitter: ada +
 og-image.png 200 dengan content-type image/* (bukan text/html — fallback
@@ -33,7 +33,7 @@ def fetch(url):
 
 
 def main():
-    base = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "https://dotfiles.pages.dev"
+    base = sys.argv[1].rstrip("/") if len(sys.argv) > 1 else "https://dezz-dotfiles.pages.dev"
     failures = []
 
     try:

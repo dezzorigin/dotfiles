@@ -13,7 +13,7 @@
 
 > *"Perfection is achieved, not when there is nothing more to add, but when there is nothing left to take away."* — Antoine de Saint-Exupéry
 
-**Etalase:** [dotfiles.pages.dev](https://dotfiles.pages.dev) — katalog konfigurasi + cara install. Produknya tetap repo ini.
+**Etalase:** [dezz-dotfiles.pages.dev](https://dezz-dotfiles.pages.dev) — katalog konfigurasi + cara install. Produknya tetap repo ini.
 
 ## Overview
 
