@@ -120,7 +120,7 @@ Daftar lengkap: `.local/share/caelestia/hypr/hyprland/keybinds.conf`.
 Repo ini pernah tanpa `.gitignore` — sekarang ada `.gitignore` ketat (kredensial, kunci, token, cache, hasil build). Audit 19 Nov 2026:
 
 - Audit nama path seluruh tree (192 file) + riwayat (4 commit): nol nama file yang mengindikasikan kredensial.
-- Gitleaks 8.28.0 riwayat penuh: 2 temuan, keduanya false positive — shortcut keyboard VS Code (`"key": "ctrl+shift+down"`) yang salah di-flag rule `generic-api-key`. Ditutup allowlist sempit di `.gitleaks.toml` (hanya file itu, hanya rule itu). CI menjalankan gitleaks di setiap push/PR dengan `fetch-depth: 0`.
+- Gitleaks 8.28.0 riwayat penuh: 2 temuan, keduanya false positive — shortcut keyboard VS Code (nilai properti `key` di `keybindings.json`: `ctrl+shift+down` dan `shift+alt+down`) yang salah di-flag rule `generic-api-key`. Ditutup allowlist sempit di `.gitleaks.toml` (hanya file itu, hanya rule itu). CI menjalankan gitleaks di setiap push/PR dengan `fetch-depth: 0`.
 
 ## CI
 

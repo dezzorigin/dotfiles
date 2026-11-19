@@ -3,8 +3,8 @@
 # Hasil scan riwayat penuh (gitleaks 8.28.0, 19 Nov 2026): 2 temuan, KEDUANYA
 # false positive pada rule generic-api-key di
 # .local/share/caelestia/vscode/keybindings.json — yang di-flag adalah
-# shortcut keyboard VS Code ("key": "ctrl+shift+down",
-# "key": "shift+alt+down"), BUKAN api key. File itu berisi daftar keybinding
+# shortcut keyboard VS Code (nilai properti key: ctrl+shift+down dan
+# shift+alt+down), BUKAN api key. File itu berisi daftar keybinding
 # editor dan tidak mengandung kredensial apa pun.
 #
 # Allowlist di bawah menutup rule itu HANYA untuk file tersebut, supaya job

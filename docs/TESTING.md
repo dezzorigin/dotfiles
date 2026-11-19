@@ -53,6 +53,6 @@ npm run e2e
   dibuka — audit hanya nama path.
 - Gitleaks 8.28.0, riwayat penuh: **2 temuan, keduanya false positive**
   rule `generic-api-key` pada `.local/share/caelestia/vscode/keybindings.json`
-  — yang di-flag adalah shortcut keyboard VS Code (`"key":
-  "ctrl+shift+down"`, `"key": "shift+alt+down"`). Ditutup allowlist sempit
+  — yang di-flag adalah shortcut keyboard VS Code (nilai properti `key`:
+  `ctrl+shift+down` dan `shift+alt+down`). Ditutup allowlist sempit
   di `.gitleaks.toml` (hanya file itu, hanya rule itu).
