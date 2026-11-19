@@ -1,0 +1,72 @@
+# .gitignore — dotfiles (EndeavourOS / Hyprland / Caelestia + Ax-Shell)
+#
+# Repo ini dulunya TANPA .gitignore (temuan analisis P1 #48). File ini
+# ditambahkan agar tidak ada satu pun berkas sensitif, cache, atau hasil
+# build yang bisa ke-commit — baik sekarang maupun oleh kontributor nanti.
+# Pola di bawah menutup: kredensial & kunci, histori shell, cache aplikasi,
+# hasil build/packaging, serta artefak kerja lokal (staging deploy, dsb).
+
+# ── Kredensial, kunci, token — JANGAN PERNAH ke-commit ────────────────────
+.env
+.env.*
+*.env
+*secret*
+*token*
+*credential*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.pub
+.aws/
+.ssh/
+.gnupg/
+.kube/
+*password*
+passwd
+
+# ── Histori & state shell / editor ──────────────────────────────────────────
+.histfile
+.fish_history
+.zsh_history
+.bash_history
+*~
+*.swp
+*.swo
+.viminfo
+.idea/
+.vscode/settings.json
+
+# ── Cache & data runtime aplikasi ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+node_modules/
+.cache/
+.local/share/Trash/
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# ── Build / packaging ──────────────────────────────────────────────────────
+dist/
+build/
+out/
+*.vsix
+*.tar.gz
+*.zip
+target/
+*.o
+*.so
+
+# ── Artefak kerja lokal (bukan bagian repo) ─────────────────────────────────
+/staging/
+.dotfiles-stage/
+.DS_Store
+Thumbs.db

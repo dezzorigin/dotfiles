@@ -1,0 +1,32 @@
+# Gitleaks — konfigurasi repo dotfiles.
+#
+# Hasil scan riwayat penuh (gitleaks 8.28.0, 19 Nov 2026): 2 temuan, KEDUANYA
+# false positive pada rule generic-api-key di
+# .local/share/caelestia/vscode/keybindings.json — yang di-flag adalah
+# shortcut keyboard VS Code (nilai properti key: ctrl+shift+down dan
+# shift+alt+down), BUKAN api key. File itu berisi daftar keybinding
+# editor dan tidak mengandung kredensial apa pun.
+#
+# Allowlist di bawah menutup rule itu HANYA untuk file tersebut, supaya job
+# CI gitleaks hijau tanpa mematikan rule generic-api-key di tempat lain.
+# Kalau ada temuan secret sungguhan di file lain, job tetap gagal — dan
+# penanganannya adalah lapor ke koordinator, BUKAN tambah allowlist.
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "False positive: VS Code keybindings, bukan API key (audit 19 Nov 2026)"
+paths = ['''\.local/share/caelestia/vscode/keybindings\.json''']
+
+# Jalur yang sama, untuk kutipan PROSA string di atas di dokumen repo.
+# README.md, docs/TESTING.md, dan file ini sendiri pernah mengutip literal
+# shortcut keyboard itu saat menjelaskan temuan audit — gitleaks memindai
+# SELURUH riwayat, jadi kutipan di commit lama tetap ter-flag walau commit
+# terbaru sudah memparafrasenya. Ketiganya hanya teks penjelasan, bukan
+# kredensial; allowlist ini tidak menutup rule generic-api-key di file lain.
+[[rules.allowlists]]
+description = "False positive: kutipan prosa shortcut keyboard di docs (bukan API key)"
+paths = ['''README\.md''', '''docs/TESTING\.md''', '''\.gitleaks\.toml''']

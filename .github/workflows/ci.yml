@@ -1,0 +1,233 @@
+name: CI
+
+# CI untuk dotfiles (repo #48 — config EndeavourOS/Hyprland, bukan app).
+# Job:
+#   shellcheck     — shellcheck + bash -n untuk semua .sh (8 file).
+#   fish-syntax    — fish --no-execute untuk semua .fish (5 file).
+#   python-syntax  — py_compile untuk 66 file .py (Ax-Shell).
+#   config-syntax  — JSON/JSONC + TOML valid.
+#   gitleaks       — secret scan riwayat penuh (fetch-depth 0) + .gitleaks.toml.
+#   advisory-sweep — OSV atas 1 dependensi produksi (tinycolor2@1.6.0, npm).
+#   static-checks  — html-validate Node 24 + gate P0 + tag OG.
+#   playwright-e2e — landing statis di server lokal (desktop + mobile).
+#   smoke          — file yang di-deploy ada & tidak kosong.
+# Node 24 (html-validate 11 crash di Node 20, pola #29).
+# JANGAN `npx playwright install` di VM dev — hanya di CI.
+# JANGAN pakai `| tee` tanpa pipefail di step CI (pelajaran #44: tee
+# menutupi exit code gagal jadi tampak hijau).
+#
+# CATATAN LOCKFILE (19 Nov 2026): repo ini BELUM punya package-lock.json
+# di root. CI memakai `npm install` (bukan `npm ci`) dan TANPA `cache: npm`
+# di setup-node (keduanya butuh lockfile). Lockfile hasil instalasi CI
+# diunggah sebagai artifact (job static-checks) supaya bisa di-commit
+# belakangan.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Shell: lint + bash -n ───────────────────────────────────────────────
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+
+      - name: Shellcheck semua .sh
+        run: |
+          set -euo pipefail
+          mapfile -t files < <(git ls-files '*.sh')
+          echo "cek ${#files[@]} file .sh"
+          shellcheck -S warning "${files[@]}"
+
+      - name: bash -n semua .sh
+        run: |
+          set -euo pipefail
+          for f in $(git ls-files '*.sh'); do bash -n "$f" || exit 1; done
+          echo "bash -n: OK"
+
+  # ── Fish: syntax check ──────────────────────────────────────────────────
+  fish-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fish
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq fish
+
+      - name: fish --no-execute semua .fish
+        run: |
+          set -euo pipefail
+          for f in $(git ls-files '*.fish'); do
+            echo "cek $f"
+            fish --no-execute "$f" || exit 1
+          done
+          echo "fish --no-execute: OK"
+
+  # ── Python: kompilasi sintaks (66 file Ax-Shell) ────────────────────────
+  python-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: py_compile semua .py
+        run: |
+          set -euo pipefail
+          python3 -m py_compile $(git ls-files '*.py')
+          echo "py_compile: OK ($(git ls-files '*.py' | wc -l) file)"
+
+  # ── Config: JSON/JSONC + TOML valid ─────────────────────────────────────
+  config-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validasi JSON, JSONC, TOML
+        run: |
+          set -euo pipefail
+          python3 - <<'EOF'
+          import json, re, subprocess, sys, tomllib
+          files = subprocess.check_output(["git", "ls-files"], text=True).splitlines()
+          def strip_jsonc(txt):
+              # Hapus komentar // dan /* */ lalu koma berlebih — JSONC
+              # yang diterima VS Code, Zed, dan tsc (4 file .json di repo
+              # ini memang JSONC, bukan JSON ketat; lihat docs/TESTING.md).
+              txt = re.sub(r"(?m)^\s*//.*$", "", txt)
+              txt = re.sub(r"/\*.*?\*/", "", txt, flags=re.S)
+              txt = re.sub(r",\s*([}\]])", r"\1", txt)
+              return txt
+          bad = []
+          for f in files:
+              if f.endswith(".json"):
+                  try:
+                      json.load(open(f))
+                  except Exception:
+                      try:
+                          json.loads(strip_jsonc(open(f).read()))
+                      except Exception as e:
+                          bad.append(f"{f}: {e}")
+              elif f.endswith(".jsonc"):
+                  try:
+                      json.loads(strip_jsonc(open(f).read()))
+                  except Exception as e:
+                      bad.append(f"{f}: {e}")
+              elif f.endswith(".toml"):
+                  try:
+                      tomllib.load(open(f, "rb"))
+                  except Exception as e:
+                      bad.append(f"{f}: {e}")
+          if bad:
+              print("FAIL:")
+              print("\n".join(bad)); sys.exit(1)
+          print("config-syntax: OK (JSON/JSONC/TOML valid)")
+          EOF
+
+  # ── Gitleaks: secret scan riwayat penuh ─────────────────────────────────
+  # Bukan gitleaks-action: action itu tidak memakai .gitleaks.toml repo
+  # (allowlist false positive keybinding VS Code tidak terbaca → job gagal
+  # pada 2 temuan yang sudah diaudit). Binary resmi diunduh langsung dan
+  # dijalankan dengan --config eksplisit — pola yang sama dengan verifikasi
+  # lokal (gitleaks 8.28.0: "no leaks found").
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install gitleaks 8.28.0
+        run: |
+          curl -sL -o /tmp/gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+
+      - name: Gitleaks (riwayat penuh, config repo)
+        run: /tmp/gitleaks git --no-banner --config .gitleaks.toml
+
+  # ── Advisory sweep (OSV, tanpa auth) ────────────────────────────────────
+  advisory-sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sweep 1 dependensi produksi di OSV
+        run: python3 scripts/advisory-sweep.py
+
+  # ── Pemeriksaan statis: HTML + gate P0 + tag OG ─────────────────────────
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Validasi HTML
+        run: npx html-validate index.html
+
+      - name: Gate P0 + tag OG/Twitter
+        run: npm run validate
+
+      - name: Unggah package-lock hasil instalasi
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-lock
+          path: package-lock.json
+          if-no-files-found: warn
+
+  # ── E2E Playwright (landing statis, HANYA di CI) ────────────────────────
+  playwright-e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: E2E landing (desktop + mobile)
+        run: npm run e2e
+
+  # ── Smoke: file deploy ada & tidak kosong ───────────────────────────────
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: File deploy ada & tidak kosong
+        run: |
+          for f in index.html styles.css app.js favicon.svg og-image.png; do
+            test -s "$f" || { echo "FAIL: $f hilang/kosong"; exit 1; }
+            echo "ok: $f ($(stat -c%s "$f") byte)"
+          done
