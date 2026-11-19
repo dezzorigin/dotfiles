@@ -137,6 +137,11 @@ jobs:
           EOF
 
   # ── Gitleaks: secret scan riwayat penuh ─────────────────────────────────
+  # Bukan gitleaks-action: action itu tidak memakai .gitleaks.toml repo
+  # (allowlist false positive keybinding VS Code tidak terbaca → job gagal
+  # pada 2 temuan yang sudah diaudit). Binary resmi diunduh langsung dan
+  # dijalankan dengan --config eksplisit — pola yang sama dengan verifikasi
+  # lokal (gitleaks 8.28.0: "no leaks found").
   gitleaks:
     runs-on: ubuntu-latest
     steps:
@@ -144,11 +149,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install gitleaks 8.28.0
+        run: |
+          curl -sL -o /tmp/gitleaks.tar.gz https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
+          tar -xzf /tmp/gitleaks.tar.gz -C /tmp gitleaks
+
       - name: Gitleaks (riwayat penuh, config repo)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_CONFIG: .gitleaks.toml
+        run: /tmp/gitleaks git --no-banner --config .gitleaks.toml
 
   # ── Advisory sweep (OSV, tanpa auth) ────────────────────────────────────
   advisory-sweep:
