@@ -20,3 +20,13 @@ id = "generic-api-key"
 [[rules.allowlists]]
 description = "False positive: VS Code keybindings, bukan API key (audit 19 Nov 2026)"
 paths = ['''\.local/share/caelestia/vscode/keybindings\.json''']
+
+# Jalur yang sama, untuk kutipan PROSA string di atas di dokumen repo.
+# README.md, docs/TESTING.md, dan file ini sendiri pernah mengutip literal
+# shortcut keyboard itu saat menjelaskan temuan audit — gitleaks memindai
+# SELURUH riwayat, jadi kutipan di commit lama tetap ter-flag walau commit
+# terbaru sudah memparafrasenya. Ketiganya hanya teks penjelasan, bukan
+# kredensial; allowlist ini tidak menutup rule generic-api-key di file lain.
+[[rules.allowlists]]
+description = "False positive: kutipan prosa shortcut keyboard di docs (bukan API key)"
+paths = ['''README\.md''', '''docs/TESTING\.md''', '''\.gitleaks\.toml''']

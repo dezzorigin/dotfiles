@@ -55,4 +55,5 @@ npm run e2e
   rule `generic-api-key` pada `.local/share/caelestia/vscode/keybindings.json`
   — yang di-flag adalah shortcut keyboard VS Code (nilai properti `key`:
   `ctrl+shift+down` dan `shift+alt+down`). Ditutup allowlist sempit
-  di `.gitleaks.toml` (hanya file itu, hanya rule itu).
+  di `.gitleaks.toml` (file keybindings + 3 file docs yang mengutipnya
+  saat menjelaskan audit; hanya rule itu).
